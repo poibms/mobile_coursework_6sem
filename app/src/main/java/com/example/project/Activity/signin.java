@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project.Database.DBHelper;
-import com.example.project.Database.UserDB;
-import com.example.project.Helper.SharedPreferencesHelper;
 import com.example.project.R;
 import com.example.project.api.OnFetchDataListener;
 import com.example.project.api.requestManager.RequestAccountManager;
@@ -30,14 +28,15 @@ public class signin extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private static final String SHARED_PREF_NAME = "userInfo";
     private static final String KEY_ID = "userId";
-    private static final String KEY_EMAIL = "LOGIN";
+    private static final String KEY_ACCOUNT = "Account";
 
 
     private final Context context = this;
     private final OnFetchDataListener<Account> responseListener = new OnFetchDataListener<Account>() {
         @Override public void onFetchData(Response<Account> response) {
             if(response.isSuccessful()) {
-                    SharedPreferencesHelper.addAccount(context, response.body());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(KEY_ACCOUNT, response.body().getToken()).apply();
                 startActivity(new Intent(context, MainActivity.class));
             } else if(response.code() == 404) {
                 emailEdit.setError("Account with this email not exist");
@@ -60,7 +59,7 @@ public class signin extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-        String email = sharedPreferences.getString(KEY_EMAIL, null);
+        String email = sharedPreferences.getString(KEY_ACCOUNT, null);
         if(email != null) {
             startActivity(new Intent(this, MainActivity.class));
         }

@@ -6,19 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project.Database.DBHelper;
-import com.example.project.Database.UserDB;
-import com.example.project.Helper.SharedPreferencesHelper;
-import com.example.project.Model.User;
 import com.example.project.R;
 import com.example.project.api.OnFetchDataListener;
 import com.example.project.api.requestManager.RequestAccountManager;
@@ -32,6 +29,8 @@ public class Signup extends AppCompatActivity {
     EditText emailEdit, passwordEdit;
     String login, email, password;
     Button signUpBtn, signInActBtn;
+    SharedPreferences sharedPreferences;
+    private static final String KEY_ACCOUNT = "Account";
 
     private SQLiteDatabase db;
     private final Context context = this;
@@ -96,7 +95,8 @@ public class Signup extends AppCompatActivity {
     private final OnFetchDataListener<Account> responseListener = new OnFetchDataListener<Account>() {
         @Override public void onFetchData(Response<Account> response) {
             if(response.isSuccessful()) {
-                    SharedPreferencesHelper.addAccount(context, response.body());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(KEY_ACCOUNT, response.body().getToken()).apply();
                 startActivity(new Intent(context, MainActivity.class));
             } else {
                 emailEdit.setError("Email already taken");
