@@ -7,11 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 import com.example.project.Database.DBHelper;
+import com.example.project.Helper.SharedPreferencesHelper;
 import com.example.project.R;
 import com.example.project.api.OnFetchDataListener;
 import com.example.project.api.requestManager.RequestAccountManager;
@@ -30,14 +34,21 @@ public class signin extends AppCompatActivity {
     private static final String KEY_ID = "userId";
     private static final String KEY_ACCOUNT = "Account";
 
-
     private final Context context = this;
+
     private final OnFetchDataListener<Account> responseListener = new OnFetchDataListener<Account>() {
         @Override public void onFetchData(Response<Account> response) {
             if(response.isSuccessful()) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(KEY_ACCOUNT, response.body().getToken()).apply();
-                startActivity(new Intent(context, MainActivity.class));
+                SharedPreferencesHelper.addAccount(context, response.body());
+                JWT parsedJWT = new JWT(response.body().getToken());
+                Claim subscriptionMetaData = parsedJWT.getClaim("status");
+                String parsedValue = subscriptionMetaData.asString();
+                if(parsedValue != "BANNED") {
+                    startActivity(new Intent(context, MainActivity.class));
+                } else {
+                    emailEdit.setError("user with such email was banned!");
+                }
+
             } else if(response.code() == 404) {
                 emailEdit.setError("Account with this email not exist");
             } else if(response.code() == 401) {
@@ -56,11 +67,8 @@ public class signin extends AppCompatActivity {
 
         initViews();
         db = new DBHelper(getApplicationContext()).getReadableDatabase();
-
-        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-
-        String email = sharedPreferences.getString(KEY_ACCOUNT, null);
-        if(email != null) {
+        Account account = SharedPreferencesHelper.getUserInfo(context);
+        if(account.getToken() != null) {
             startActivity(new Intent(this, MainActivity.class));
         }
     }

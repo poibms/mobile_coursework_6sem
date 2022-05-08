@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.project.Database.DBHelper;
+import com.example.project.Helper.SharedPreferencesHelper;
 import com.example.project.R;
 import com.example.project.api.OnFetchDataListener;
 import com.example.project.api.requestManager.RequestAccountManager;
@@ -95,9 +96,10 @@ public class Signup extends AppCompatActivity {
     private final OnFetchDataListener<Account> responseListener = new OnFetchDataListener<Account>() {
         @Override public void onFetchData(Response<Account> response) {
             if(response.isSuccessful()) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(KEY_ACCOUNT, response.body().getToken()).apply();
-                startActivity(new Intent(context, MainActivity.class));
+                SharedPreferencesHelper.addAccount(context, response.body());
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString(KEY_ACCOUNT, response.body().getToken()).apply();
+//                startActivity(new Intent(context, MainActivity.class));
             } else {
                 emailEdit.setError("Email already taken");
 

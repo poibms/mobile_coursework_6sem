@@ -28,8 +28,10 @@ import com.example.project.Activity.createCollection;
 import com.example.project.Database.DBHelper;
 import com.example.project.Database.TripDB;
 import com.example.project.Helper.SearchHelper;
+import com.example.project.Helper.SharedPreferencesHelper;
 import com.example.project.Model.Trip;
 import com.example.project.R;
+import com.example.project.models.Account;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +39,7 @@ import java.util.Collections;
 public class AccountFragment extends Fragment {
 
     private ListView orderedListView;
-    private TextView emailTextView;
+    private TextView emailTextView, roleTextView;
     private Button logout, createCollBtn;
 
     private int userId;
@@ -46,11 +48,6 @@ public class AccountFragment extends Fragment {
     ArrayList<Trip> orderedList;
 
     SharedPreferences sharedPreferences;
-    private static final String SHARED_PREF_NAME = "userInfo";
-    private static final String KEY_ID = "userId";
-    private static final String KEY_EMAIL = "LOGIN";
-
-
 
 
     @Nullable
@@ -66,16 +63,14 @@ public class AccountFragment extends Fragment {
         logout = (Button) view.findViewById(R.id.logoutBtn);
         createCollBtn = (Button) view.findViewById(R.id.createCollBtn);
         emailTextView = (TextView) view.findViewById(R.id.email);
+        roleTextView = (TextView) view.findViewById(R.id.role);
         orderedListView = (ListView)view.findViewById(R.id.orderedListView);
 
         db = new DBHelper(getContext()).getReadableDatabase();
 
-        sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        String userEmail = sharedPreferences.getString(KEY_EMAIL, null);
-        userId = sharedPreferences.getInt(KEY_ID, 0);
-
-        emailTextView.setText(userEmail);
+        Account account = SharedPreferencesHelper.getUserInfo(getContext());
+        emailTextView.setText(account.getEmail());
+        roleTextView.setText(account.getRole());
 
         orderedList = new ArrayList<>();
 //        customListAdapter = new SearchFragment.CustomListAdapter(getContext(), orderedList);
