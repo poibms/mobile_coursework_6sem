@@ -1,11 +1,19 @@
 package com.example.project.api.requestManager;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.example.project.Helper.HttpHelper;
 import com.example.project.api.CollectionAPI;
 import com.example.project.api.OnFetchDataListener;
 import com.example.project.config.ApiConfig;
 import com.example.project.models.Account;
 import com.example.project.models.Register;
+import com.example.project.models.Root;
+import com.example.project.models.Tags;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,30 +29,22 @@ public class RequestTagsManager {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     private final CollectionAPI collectionAPI = retrofit.create(CollectionAPI.class);
+    private final Context context;
 
-    public void register(OnFetchDataListener<Account> listener, Register register) {
-        Call<Account> call = collectionAPI.register(register);
+    public RequestTagsManager(Context context) { this.context = context; }
 
-        call.enqueue(new Callback<Account>() {
-            @Override public void onResponse(Call<Account> call, Response<Account> response) {
+    public void getTags(OnFetchDataListener<Tags> listener) {
+        Call<Tags> call = collectionAPI.getTags();
+
+        call.enqueue(new Callback<Tags>() {
+            @Override public void onResponse(Call<Tags> call, Response<Tags> response) {
                 listener.onFetchData(response);
             }
-            @Override public void onFailure(Call<Account> call, Throwable t) {
+            @Override public void onFailure(Call<Tags> call, Throwable t) {
+
                 listener.onFetchError(t);
             }
         });
     }
 
-    public void login(OnFetchDataListener<Account> listener, Register login) {
-        Call<Account> call = collectionAPI.login(login);
-
-        call.enqueue(new Callback<Account>() {
-            @Override public void onResponse(Call<Account> call, Response<Account> response) {
-                listener.onFetchData(response);
-            }
-            @Override public void onFailure(Call<Account> call, Throwable t) {
-                listener.onFetchError(t);
-            }
-        });
-    }
 }

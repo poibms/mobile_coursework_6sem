@@ -80,9 +80,7 @@ public class AccountFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.commit();
+                SharedPreferencesHelper.logOut(getContext());
                 getActivity().finish();
             }
         });
@@ -100,20 +98,20 @@ public class AccountFragment extends Fragment {
 
     private void getOrderedTickets () {
         try {
-            String[] strData;
-            int i = 0;
-
-            Cursor cursor = TripDB.getOrderTickets(db, userId);
-            strData = new String[cursor.getCount()];
-            while(cursor.moveToNext()){
-                strData[i++] = "From: " + cursor.getString(0) + "\n\t\t" + "To: " + cursor.getString(1) +
-                        "\n\t\t" + "Start Time: " + cursor.getString(2) +
-                        "\n\t\t" + "Tickets count: " + cursor.getString(3) +
-                        "\n\t\t" + "Final price: " + cursor.getString(4) + "$";
-            }
-            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(),
-                    android.R.layout.simple_list_item_1, strData);
-            orderedListView.setAdapter(adapter);
+//            String[] strData;
+//            int i = 0;
+//
+//            Cursor cursor = TripDB.getOrderTickets(db, userId);
+//            strData = new String[cursor.getCount()];
+//            while(cursor.moveToNext()){
+//                strData[i++] = "From: " + cursor.getString(0) + "\n\t\t" + "To: " + cursor.getString(1) +
+//                        "\n\t\t" + "Start Time: " + cursor.getString(2) +
+//                        "\n\t\t" + "Tickets count: " + cursor.getString(3) +
+//                        "\n\t\t" + "Final price: " + cursor.getString(4) + "$";
+//            }
+//            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(),
+//                    android.R.layout.simple_list_item_1, strData);
+//            orderedListView.setAdapter(adapter);
 //            orderedListView.setAdapter(orderedTickets);
 
         } catch (Exception e) {

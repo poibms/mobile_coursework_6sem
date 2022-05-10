@@ -22,21 +22,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + USER_TABLE + " (                    "
-                + "id SERIAL PRIMARY KEY,"
-                + "email text not null,"
-                + "password text not null,"
-                + "role TEXT default 'USER' NOT NULL,"
-                + "status TEXT default 'ACTIVE' NOT NULL )"
-        );
 
         db.execSQL("create table " + COLLeCTIONS_TABLE + "("
                 +"id SERIAL PRIMARY KEY," +
                 "title TEXT NOT NULL," +
                 "description TEXT NOT NULL," +
                 "image TEXT NOT NULL," +
-                "owner_id integer," +
-                "FOREIGN KEY (owner_id) references users(id) ON DELETE CASCADE )"
+                "owner_id integer )"
         );
 
         db.execSQL("create table " + ITEMS_TABLE + " (                    "
@@ -45,7 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "description TEXT NOT NULL," +
                 "image TEXT NOT NULL," +
                 "collection_id integer," +
-                "FOREIGN KEY (collection_id) references collections(id) ON DELETE CASCADE )"
+                "FOREIGN KEY(collection_id) REFERENCES " + COLLeCTIONS_TABLE + "(Id)        " +
+                "   ON DELETE CASCADE ON UPDATE CASCADE );"
 
         );
         db.execSQL("create table " + TAGS_TABLE + " (                    "
@@ -55,8 +48,12 @@ public class DBHelper extends SQLiteOpenHelper {
         );
 
         db.execSQL("create table " + COLLTAGS_TABLE + " (                    "
-                + "id SERIAL PRIMARY KEY," +
-                "text TEXT NOT NULL )"
+                + "collection_id integer NOT NULL,"
+                + "tags_id integer NOT NULL,"
+                + "FOREIGN KEY(collection_id) REFERENCES " + COLLeCTIONS_TABLE + "(Id)        " +
+                "   ON DELETE CASCADE ON UPDATE CASCADE , "
+                + "FOREIGN KEY(tags_id) REFERENCES " + TAGS_TABLE + "(Id)        " +
+                "   ON DELETE CASCADE ON UPDATE CASCADE                      )"
 
         );
     }

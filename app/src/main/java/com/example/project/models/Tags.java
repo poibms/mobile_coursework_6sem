@@ -1,17 +1,10 @@
 package com.example.project.models;
 
-public class Tags {
-    private Integer id;
-    private String text;
+import com.google.gson.annotations.SerializedName;
 
-    public Tags(Integer id, String text) {
-        this.id = id;
-        this.text = text;
-    }
+import java.util.ArrayList;
 
-    public Integer getId() { return id; }
-    public String getText() { return text; }
+public class Tags{
+    public ArrayList<Root> tags;
+};
 
-    public void setId(Integer id) { this.id = id; }
-    public void setText(String text) { this.text = text; }
-}

@@ -38,7 +38,7 @@ public class SelectedTripActivity extends AppCompatActivity {
 
 
         binding();
-        setListener();
+//        setListener();
         setDefaultValues();
 
     }
@@ -86,46 +86,46 @@ public class SelectedTripActivity extends AppCompatActivity {
     }
 
 
-    private void setListener() {
-        plusBtn.setOnClickListener(view -> {
-            if(count == Integer.parseInt(availablePlaces.getText().toString())) {
-                plusBtn.setEnabled(false);
-            } else {
-                minusBtn.setEnabled(true);
-                count++;
-                price.setText(String.valueOf(currPrice * count));
-                counterPlace.setText(String.valueOf(count));
-            }
-        });
-
-        minusBtn.setOnClickListener(view -> {
-            if(count <= 1 ) {
-                minusBtn.setEnabled(false);
-            } else {
-                plusBtn.setEnabled(true);
-                count--;
-                price.setText(String.valueOf(currPrice * count));
-                counterPlace.setText(String.valueOf(count));
-            }
-        });
-
-        orderBtn.setOnClickListener(view -> {
-
-            try {
-                freePlaces = Integer.parseInt(availablePlaces.getText().toString());
-                finalCost = Integer.parseInt(price.getText().toString());
-
-                OrderedTickets order = new OrderedTickets(userId, tripId, count, finalCost);
-                if(OrderTicketsDB.orderTicket(db, order) != -1 && TripDB.updatePlaces(db, tripId, freePlaces - count) != 0) {
-                    Toast.makeText(this, "Thanks for using our service", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, "Tickets was not booked", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Trash", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void setListener() {
+//        plusBtn.setOnClickListener(view -> {
+//            if(count == Integer.parseInt(availablePlaces.getText().toString())) {
+//                plusBtn.setEnabled(false);
+//            } else {
+//                minusBtn.setEnabled(true);
+//                count++;
+//                price.setText(String.valueOf(currPrice * count));
+//                counterPlace.setText(String.valueOf(count));
+//            }
+//        });
+//
+//        minusBtn.setOnClickListener(view -> {
+//            if(count <= 1 ) {
+//                minusBtn.setEnabled(false);
+//            } else {
+//                plusBtn.setEnabled(true);
+//                count--;
+//                price.setText(String.valueOf(currPrice * count));
+//                counterPlace.setText(String.valueOf(count));
+//            }
+//        });
+//
+//        orderBtn.setOnClickListener(view -> {
+//
+//            try {
+//                freePlaces = Integer.parseInt(availablePlaces.getText().toString());
+//                finalCost = Integer.parseInt(price.getText().toString());
+//
+//                OrderedTickets order = new OrderedTickets(userId, tripId, count, finalCost);
+//                if(OrderTicketsDB.orderTicket(db, order) != -1 && TripDB.updatePlaces(db, tripId, freePlaces - count) != 0) {
+//                    Toast.makeText(this, "Thanks for using our service", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                } else {
+//                    Toast.makeText(this, "Tickets was not booked", Toast.LENGTH_SHORT).show();
+//                }
+//            } catch (Exception e) {
+//                Toast.makeText(this, "Trash", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
 }

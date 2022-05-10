@@ -35,14 +35,29 @@
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/tripListView"
-        android:layout_width="410dp"
-        android:layout_height="593dp"
-        android:layout_below="@+id/textView"
+
+
+
+<!--    <ListView-->
+<!--        android:id="@+id/tripListView"-->
+<!--        android:layout_width="410dp"-->
+<!--        android:layout_height="593dp"-->
+<!--        android:layout_below="@+id/textView"-->
+<!--        android:layout_marginTop="71dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView"-->
+<!--        tools:listitem="@layout/list_item" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/collect_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/collect_list_item"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="71dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:listitem="@layout/list_item" />
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

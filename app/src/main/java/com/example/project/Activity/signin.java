@@ -25,7 +25,7 @@ import com.example.project.models.Register;
 import retrofit2.Response;
 
 public class signin extends AppCompatActivity {
-    EditText emailEdit, passwordEdit;
+        EditText emailEdit, passwordEdit;
     String email, password;
     private SQLiteDatabase db;
 
@@ -67,8 +67,7 @@ public class signin extends AppCompatActivity {
 
         initViews();
         db = new DBHelper(getApplicationContext()).getReadableDatabase();
-        Account account = SharedPreferencesHelper.getUserInfo(context);
-        if(account.getToken() != null) {
+        if(SharedPreferencesHelper.isLogin(context)) {
             startActivity(new Intent(this, MainActivity.class));
         }
     }

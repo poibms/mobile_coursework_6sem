@@ -42,7 +42,26 @@ public class SharedPreferencesHelper {
         if(accountJson == null) return null;
         Gson gson = new Gson();
         Account account = gson.fromJson(accountJson, Account.class);
-      return account;
+        Log.d("JWT_DECODED", "Acc: " + account.getToken());
+        return account;
+    }
 
+    public static boolean isLogin(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String accountJson = sharedPref.getString(KEY_ACCOUNT, null);
+
+        if(accountJson == null) return false;
+
+        Gson gson = new Gson();
+        Account account = gson.fromJson(accountJson, Account.class);
+
+        return account != null && account.getToken() != null;
+    }
+
+    public static void logOut(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+
+        sharedPrefEditor.remove("Account").apply();
     }
 }

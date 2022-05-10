@@ -4,28 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.project.Fragments.AccountFragment;
-import com.example.project.Fragments.AddFragment;
 import com.example.project.Fragments.SearchFragment;
-import com.example.project.Helper.DateTimeHelper;
 import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Calendar;
-
 public class MainActivity extends AppCompatActivity {
     public BottomNavigationView navigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.bottom_navigation);
 
-
         navigationView.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container
                 , new SearchFragment()).commit();
+
     }
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,8 +49,5 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
-
-
-
 
 }

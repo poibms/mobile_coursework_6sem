@@ -13,9 +13,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Project">
+        android:theme="@style/Theme.Project"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Activity.selectedCollection"
+            android:exported="false" />
         <activity
             android:name=".Activity.createCollection"
             android:exported="false" />
