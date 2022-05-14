@@ -33,6 +33,9 @@ public interface CollectionAPI {
     @GET("collections/{id}")
     Call<FullCollection> getCollById(@Path("id") Integer id);
 
+    @GET("collections/user")
+    Call<ArrayList<Collect>> getCollByUserId(@Header("authorization") String token);
+
     @DELETE("collections/{colId}")
     Call<String> deleteColl(@Header("authorization") String token, @Path("colId") Integer id);
 }

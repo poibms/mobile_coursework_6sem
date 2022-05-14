@@ -57,6 +57,20 @@ public class RequestCollectionManager {
         });
     }
 
+    public void getCollByUserId(OnFetchDataListener<ArrayList<Collect>> listener, String token) {
+        Call<ArrayList<Collect>> call = collectionAPI.getCollByUserId("Bearer " + token);
+
+
+        call.enqueue(new Callback<ArrayList<Collect>>() {
+            @Override public void onResponse(Call<ArrayList<Collect>> call, Response<ArrayList<Collect>> response) {
+                listener.onFetchData(response);
+            }
+            @Override public void onFailure(Call<ArrayList<Collect>> call, Throwable t) {
+                listener.onFetchError(t);
+            }
+        });
+    }
+
     public void deleteColl(OnFetchDataListener<String> listener, String token, Integer id) {
         Call<String> call = collectionAPI.deleteColl("Bearer " + token, id);
 

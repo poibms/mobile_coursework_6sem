@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,31 +22,43 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Activity.MainActivity;
 import com.example.project.Activity.SelectedTripActivity;
 import com.example.project.Activity.createCollection;
+import com.example.project.Database.CollectDB;
 import com.example.project.Database.DBHelper;
 import com.example.project.Database.TripDB;
+import com.example.project.Helper.DishesAdapter;
 import com.example.project.Helper.SearchHelper;
 import com.example.project.Helper.SharedPreferencesHelper;
+import com.example.project.Helper.SystemHelper;
 import com.example.project.Model.Trip;
 import com.example.project.R;
+import com.example.project.api.OnFetchDataListener;
+import com.example.project.api.requestManager.RequestCollectionManager;
 import com.example.project.models.Account;
+import com.example.project.models.Collect;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+import retrofit2.Response;
+
 public class AccountFragment extends Fragment {
 
-    private ListView orderedListView;
+//    private ListView orderedListView;
     private TextView emailTextView, roleTextView;
     private Button logout, createCollBtn;
+    private RecyclerView collectionRecycler;
+
 
     private int userId;
     private SQLiteDatabase db;
-    private SearchFragment.CustomListAdapter customListAdapter;
-    ArrayList<Trip> orderedList;
+    Account account;
+    private ArrayList<Collect> collArray;
 
     SharedPreferences sharedPreferences;
 
@@ -64,17 +77,17 @@ public class AccountFragment extends Fragment {
         createCollBtn = (Button) view.findViewById(R.id.createCollBtn);
         emailTextView = (TextView) view.findViewById(R.id.email);
         roleTextView = (TextView) view.findViewById(R.id.role);
-        orderedListView = (ListView)view.findViewById(R.id.orderedListView);
+        collectionRecycler = (RecyclerView) view.findViewById(R.id.collect_recycler);
+//        orderedListView = (ListView)view.findViewById(R.id.orderedListView);
 
         db = new DBHelper(getContext()).getReadableDatabase();
 
-        Account account = SharedPreferencesHelper.getUserInfo(getContext());
+        account = SharedPreferencesHelper.getUserInfo(getContext());
         emailTextView.setText(account.getEmail());
         roleTextView.setText(account.getRole());
 
-        orderedList = new ArrayList<>();
 //        customListAdapter = new SearchFragment.CustomListAdapter(getContext(), orderedList);
-        getOrderedTickets();
+        getData();
 
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -96,26 +109,38 @@ public class AccountFragment extends Fragment {
 
     }
 
-    private void getOrderedTickets () {
-        try {
-//            String[] strData;
-//            int i = 0;
-//
-//            Cursor cursor = TripDB.getOrderTickets(db, userId);
-//            strData = new String[cursor.getCount()];
-//            while(cursor.moveToNext()){
-//                strData[i++] = "From: " + cursor.getString(0) + "\n\t\t" + "To: " + cursor.getString(1) +
-//                        "\n\t\t" + "Start Time: " + cursor.getString(2) +
-//                        "\n\t\t" + "Tickets count: " + cursor.getString(3) +
-//                        "\n\t\t" + "Final price: " + cursor.getString(4) + "$";
-//            }
-//            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(),
-//                    android.R.layout.simple_list_item_1, strData);
-//            orderedListView.setAdapter(adapter);
-//            orderedListView.setAdapter(orderedTickets);
+    private void getData() {
+       if(SystemHelper.isNetworkAvailable(getContext())) {
+           RequestCollectionManager collectionManager = new RequestCollectionManager(getContext());
+           collectionManager.getCollByUserId(getCollListener, account.getToken());
+       } else {
+           Log.e("JWT_DECODED", "body: " + "error");
+       }
+    }
 
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Something was wrong", Toast.LENGTH_SHORT).show();
+    private final OnFetchDataListener<ArrayList<Collect>> getCollListener = new OnFetchDataListener<ArrayList<Collect>>() {
+        @Override
+        public void onFetchData(Response<ArrayList<Collect>> response) {
+            if(response.isSuccessful()) {
+                collArray = response.body();
+                displayCollect(collArray);
+            }
+            else {
+                Log.e("JWT_DECODED", "body: " + response.code());
+                Toast.makeText(getContext(), "Error by getting ", Toast.LENGTH_LONG).show();
+            }
         }
+        @Override
+        public void onFetchError(Throwable error) {
+            Log.e("JWT_DECODED", "body: " + error);
+            Toast.makeText(getContext(), "Error by getting dishes", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private void displayCollect(ArrayList<Collect> collections) {
+        collectionRecycler.setHasFixedSize(true);
+        collectionRecycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        DishesAdapter dishesAdapter = new DishesAdapter(getContext(), collections);
+        collectionRecycler.setAdapter(dishesAdapter);
     }
 }

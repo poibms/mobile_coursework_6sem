@@ -59,7 +59,6 @@ public class SearchFragment extends Fragment {
     private String from, to, startDate;
     private int capacity;
     private RecyclerView collectionRecycler;
-    private CustomListAdapter customListAdapter;
     private TextView textViewResult;
     private Spinner spinner;
     private ListView listView;
@@ -145,36 +144,8 @@ public class SearchFragment extends Fragment {
         for (int i = 0; i < lables.size(); i++) {
             array[i] = lables.get(i).getId()+ " " + lables.get(i).getText();
         }
-//        String[] array = lables.toArray(new String[] {});
-//        String[] array = Arrays.copyOf(lables, lables.length, String[].class);
-//        String[] array = new String[lables.size()];
-//        int index = 0;
-//        for (Object value : lables) {
-//            array[index] = (String) value;
-//            index++;
-//        }
-//        StringBuilder sb = new StringBuilder();
-//        for (String s : lables)
-//        {
-//            sb.append(s);
-//            sb.append("\t");
-//        }
         Log.d("JWT_DECODED", "spin: " + Arrays.toString(langArray));
         Log.d("JWT_DECODED", "spin: " + Arrays.toString(array));
-
-//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(),
-//                android.R.layout.simple_spinner_item, lables);
-//
-//        // Drop down layout style - list view with radio button
-//        dataAdapter
-//                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        // attaching data adapter to spinner
-//        spinner.setAdapter(dataAdapter);
-
-
-//        customListAdapter = new CustomListAdapter(getContext(), collArray);
-//        listView.setAdapter(customListAdapter);
 
 
         // assign variable
@@ -282,57 +253,4 @@ public class SearchFragment extends Fragment {
         collectionRecycler.setAdapter(dishesAdapter);
     }
 
-
-    public class CustomListAdapter extends BaseAdapter {
-
-        private ArrayList<Collect> trips;
-        private Context context;
-
-        public CustomListAdapter(Context context, ArrayList<Collect> trips) {
-            this.context = context;
-            this.trips = trips;
-        }
-
-        @Override
-        public int getCount() {return trips.size();}
-
-        @Override
-        public Object getItem(int i) {return null;}
-
-        @Override
-        public long getItemId(int i) {return 0;}
-
-        public void updateStudentsList(ArrayList<Collect> trips) {
-            this.trips.clear();
-            this.trips.addAll(trips);
-            this.notifyDataSetChanged();
-        }
-
-        @Override
-        public View getView(int pos, View vw, ViewGroup viewGroup) {
-            View view = getLayoutInflater().inflate(R.layout.list_item, null);
-
-            TextView from = (TextView) view.findViewById(R.id.from);
-            TextView to = (TextView) view.findViewById(R.id.to);
-            TextView time = (TextView) view.findViewById(R.id.startTime);
-            TextView transportType = (TextView) view.findViewById(R.id.transportType);
-            TextView capacity = (TextView) view.findViewById(R.id.capacity);
-            TextView price = (TextView) view.findViewById(R.id.price);
-
-            from.setText(trips.get(pos).getTitle());
-            to.setText(trips.get(pos).getDescription());
-            time.setText(trips.get(pos).getId());
-//            transportType.setText(trips.get(pos).getTransportType());
-//            capacity.setText(trips.get(pos).getCapacity() + "");
-//            price.setText(trips.get(pos).getPrice() + "");
-
-            view.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), SelectedTripActivity.class);
-                intent.putExtra("Trip", trips.get(pos));
-                startActivity(intent);
-            });
-
-            return view;
-        }
-    }
 }

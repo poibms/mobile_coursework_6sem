@@ -29,6 +29,6 @@ public class ItemsDB {
     }
 
     public static void deleteItemsByCollID(SQLiteDatabase db, Integer colId) {
-        db.execSQL("delete from "+ ITEMS_TABLE + "where collection_id = " + colId + );
+        db.execSQL("delete from "+ ITEMS_TABLE + "where collection_id = " + colId);
     }
 }

@@ -44,15 +44,8 @@ public class TagsDB {
         for(Root root : tags) {
             Log.d("JWT_DECODED", "spin: " + root.getId() + " " + root.getText());
         }
-//        if(cursor.moveToNext()) {
-////            Root tags = new Root(
-////                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-////                    cursor.getString(cursor.getColumnIndexOrThrow("text"))
-////            );
-//            tags.add(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow("id"))));
-//            tags.add(cursor.getString(cursor.getColumnIndexOrThrow("text")));
+
             return tags;
-//        }
-//        return null;
+
     }
 }

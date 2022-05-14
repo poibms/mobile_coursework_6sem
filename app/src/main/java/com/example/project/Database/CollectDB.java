@@ -3,6 +3,7 @@ package com.example.project.Database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.project.models.Collect;
 import com.example.project.models.Root;
@@ -40,6 +41,26 @@ public class CollectDB {
 
     public static void deleteAllCollect(SQLiteDatabase db) {
         db.execSQL("delete from "+ COLLeCTIONS_TABLE);
+    }
+
+    public static List<Root> getCollections(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT json_query(collections) as tags from collections  " , null);
+        List<Root> tags = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+//                tags.add(String.valueOf(cursor.getInt(0)) +". " + cursor.getString(1));
+                tags.add(new Root(cursor.getInt(0), cursor.getString(1)));
+//                tags.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
+        Log.d("JWT_DECODED", "spin: " + tags);
+        for(Root root : tags) {
+            Log.d("JWT_DECODED", "spin: " + root.getId() + " " + root.getText());
+        }
+
+        return tags;
+
     }
 
 //    public static List<String> getCollections(SQLiteDatabase db) {
